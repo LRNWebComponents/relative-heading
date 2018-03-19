@@ -16,6 +16,7 @@
     </style>
     <script>
       function setParent(id){
+        console.log(id);
         var colors = document.getElementById('colors'), set = document.getElementById('set'), unset = document.getElementById('unset');
         colors.setAttribute('subtopic-of',id);
         if(id === 'demo1') {
