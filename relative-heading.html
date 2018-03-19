@@ -62,34 +62,37 @@ A LRN element
         let root = this;
         this.fire('heading-created',this);
       },
-      setParent: function(el){
+      _setParent: function(el){
         let root = this;
         if (this.__parentListener !== undefined) root.parentHeading.removeEventListener('heading-changed');
+        root.parentHeading = el;
         if (el !== null) {
-          root.parentHeading = el;
           this.__parentListener = root.parentHeading.addEventListener('heading-changed', function(e){
-            root.updateLevel();
+            root._updateLevel();
           });
         }
-        root.updateLevel();
+        root._updateLevel();
       },
-      setLevel: function(level){
+      _setLevel: function(level){
         this.level = Math.max(Math.min(level,6),1);
       },
-      getLevel: function(){
-        return this.level;
-      },
-      updateLevel: function(){
-        if(this.parentHeading !== null && this.parentHeading.level !== undefined) {
-          let level = this.parentHeading.level;
-          this.setLevel(level+1);
-        } else {
-          this.setLevel(1);
+      _updateLevel: function(){
+        let level = 1
+        if(this.parentHeading !== null) {
+          if (this.parentHeading.level !== undefined) {
+            level = this.parentHeading.level+1;
+          } else if (this.parentHeading.tagName !== undefined && this.parentHeading.tagName.match(/^H[0-6]$/)) {
+            level = parseInt(this.parentHeading.tagName.replace('H','')) + 1;
+          }
         }
+        this._setLevel(level);
       },
       _getHtml: function(level){
         this.fire('heading-changed',this);
         return '<h'+level+'>'+this.text+'</h'+level+'>';
+      },
+      attributeChanged: function(subtopicOf){
+        this.fire('heading-created',this);
       },
     });
   </script>

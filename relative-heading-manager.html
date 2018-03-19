@@ -44,10 +44,7 @@ A LRN element
           }
           document.body.addEventListener('heading-created', function(e){
             let el = e.detail, pid =  el.getAttribute('subtopic-of'), parent = document.getElementById(pid);
-            el.setParent(parent);
-          });
-          document.body.addEventListener('heading-changed', function(e){
-            
+            el._setParent(parent);
           });
         },
       });
