@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../juicy-html/juicy-html.html">
 <link rel="import" href="relative-heading-manager.html">
 
 <!--
@@ -22,7 +21,7 @@ A LRN element
         display: block;
       }
     </style>
-   <juicy-html html="[[html]]"></juicy-html>
+    <div id="html"></div>
   </template>
 
   <script>
@@ -31,28 +30,44 @@ A LRN element
       is: 'relative-heading',
 
       properties: {
+        /* 
+         * id of the heading element that this heading is a subtopic of 
+         */
         subtopicOf: {
           type: String,
           value: null,
           reflectToAttribute: true
         },
+        /* 
+         * text of the heading 
+         */
         text: {
           type: String,
           value: null,
           reflectToAttribute: true
         },
+        /* 
+         * the heading element that this heading is a subtopic of 
+         */
         parentHeading: {
           type: Object,
           value: {}
         },
-        level: {
+        /* 
+         * the heading tag, eg. <h1/>, <h2/> ...
+         */
+        tag: {
           type: Number,
           value: null,
+          computed: '_getTag(parentHeading)',
           reflectToAttribute: true
         },
+        /* 
+         * the html output 
+         */
         html: {
           type: String,
-          computed: '_getHtml(level)',
+          computed: '_getHtml(tag)',
         },
       },
       created: function(){
@@ -68,28 +83,29 @@ A LRN element
         root.parentHeading = el;
         if (el !== null) {
           this.__parentListener = root.parentHeading.addEventListener('heading-changed', function(e){
-            root._updateLevel();
+            root.parentHeading = null;
+            root.parentHeading = el;
           });
         }
-        root._updateLevel();
       },
       _setLevel: function(level){
-        this.level = Math.max(Math.min(level,6),1);
+        return Math.max(Math.min(level,6),1);
       },
-      _updateLevel: function(){
-        let level = 1
+      _getTag: function(){
+        let level = 1;
         if(this.parentHeading !== null) {
-          if (this.parentHeading.level !== undefined) {
-            level = this.parentHeading.level+1;
+          if (this.parentHeading.tag !== undefined) {
+            level = parseInt(this.parentHeading.tag.replace('h',''))+1;
           } else if (this.parentHeading.tagName !== undefined && this.parentHeading.tagName.match(/^H[0-6]$/)) {
             level = parseInt(this.parentHeading.tagName.replace('H','')) + 1;
           }
         }
-        this._setLevel(level);
+        return 'h'+this._setLevel(level);
       },
-      _getHtml: function(level){
+      _getHtml: function(tag){
         this.fire('heading-changed',this);
-        return '<h'+level+'>'+this.text+'</h'+level+'>';
+        this.innerHTML = '<'+tag+'>'+this.text+'</'+tag+'>';
+        return '<'+tag+'>'+this.text+'</'+tag+'>';
       },
       attributeChanged: function(subtopicOf){
         this.fire('heading-created',this);
