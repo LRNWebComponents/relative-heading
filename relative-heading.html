@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="relative-heading-manager.html">
 
 <!--
 `relative-heading`
@@ -20,7 +22,7 @@ A LRN element
         display: block;
       }
     </style>
-    <h2>[[title]]</h2>
+   <juicy-html html="[[html]]"></juicy-html>
   </template>
 
   <script>
@@ -29,12 +31,66 @@ A LRN element
       is: 'relative-heading',
 
       properties: {
-        title: {
+        subtopicOf: {
           type: String,
-          value: 'relative-heading',
+          value: null,
+          reflectToAttribute: true
+        },
+        text: {
+          type: String,
+          value: null,
+          reflectToAttribute: true
+        },
+        parentHeading: {
+          type: Object,
+          value: {}
+        },
+        level: {
+          type: Number,
+          value: null,
+          reflectToAttribute: true
+        },
+        html: {
+          type: String,
+          computed: '_getHtml(level)',
         },
       },
-
+      created: function(){
+        Polymer.RelativeHeadingManager.requestAvailability();
+      },
+      attached: function(){
+        let root = this;
+        this.fire('heading-created',this);
+      },
+      setParent: function(el){
+        let root = this;
+        if (this.__parentListener !== undefined) root.parentHeading.removeEventListener('heading-changed');
+        if (el !== null) {
+          root.parentHeading = el;
+          this.__parentListener = root.parentHeading.addEventListener('heading-changed', function(e){
+            root.updateLevel();
+          });
+        }
+        root.updateLevel();
+      },
+      setLevel: function(level){
+        this.level = Math.max(Math.min(level,6),1);
+      },
+      getLevel: function(){
+        return this.level;
+      },
+      updateLevel: function(){
+        if(this.parentHeading !== null && this.parentHeading.level !== undefined) {
+          let level = this.parentHeading.level;
+          this.setLevel(level+1);
+        } else {
+          this.setLevel(1);
+        }
+      },
+      _getHtml: function(level){
+        this.fire('heading-changed',this);
+        return '<h'+level+'>'+this.text+'</h'+level+'>';
+      },
     });
   </script>
 </dom-module>

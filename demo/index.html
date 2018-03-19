@@ -14,13 +14,43 @@
 
     <style is="custom-style" include="demo-pages-shared-styles">
     </style>
+    <script>
+      function setParentHeading(inc){
+        var colors = document.getElementById('colors'), level= parseInt(colors.getAttribute('level'))+inc, increment = document.getElementById('increment'), decrement = document.getElementById('decrement');
+        colors.setAttribute('level',level);
+        if (level > 5) {
+          increment.setAttribute('disabled','disabled');
+        } else {
+          increment.removeAttribute('disabled');
+        }
+        if (level === 1) {
+          decrement.setAttribute('disabled','disabled');
+        } else {
+          decrement.removeAttribute('disabled');
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic relative-heading demo</h3>
       <demo-snippet>
+        <button id="increment" onclick="setParentHeading(1)">Increase Heading</button>
+        <button id="decrement" onclick="setParentHeading(-1)" disabled>Decrease Heading</button>
         <template>
-          <relative-heading></relative-heading>
+          <relative-heading id="colors" text="Colors"></relative-heading>
+          <relative-heading id="primary" subtopic-of="colors" text="Primary Colors"></relative-heading>
+          <relative-heading id="blue" subtopic-of="primary" text="Blue"></relative-heading>
+          <relative-heading id="yellow" subtopic-of="primary" text="Yellow"></relative-heading>
+          <relative-heading id="red" subtopic-of="primary" text="Red"></relative-heading>
+          <relative-heading id="secondary" subtopic-of="colors" text="Secondary Colors"></relative-heading>
+          <relative-heading id="purple" subtopic-of="secondary" text="Purple"></relative-heading>
+          <relative-heading id="green" subtopic-of="secondary" text="Green"></relative-heading>
+          <relative-heading id="orange" subtopic-of="secondary" text="Orange"></relative-heading>
+          <relative-heading id="tertiary" subtopic-of="colors" text="Tertiary Colors"></relative-heading>
+          <relative-heading id="indigo" subtopic-of="tertiary" text="Indigo"></relative-heading>
+          <relative-heading id="aqua" subtopic-of="tertiary" text="Aqua"></relative-heading>
+          <relative-heading id="lime" subtopic-of="tertiary" text="Lime"></relative-heading>
         </template>
       </demo-snippet>
     </div>
