@@ -30,13 +30,11 @@ A LRN element
 
         is: 'relative-heading-manager',
 
-        properties: {
-          headings: {
-            type: Object,
-            value: {},
-          },
-        },
+        properties: {},
         
+        /*
+         * listen for headings and set their parent elements
+         */
         created: function() {
           let root = this;
           if (!Polymer.RelativeHeadingManager.instance) {
@@ -44,13 +42,18 @@ A LRN element
           }
           document.body.addEventListener('heading-created', function(e){
             let el = e.detail, pid =  el.getAttribute('subtopic-of'), parent = document.getElementById(pid);
-            el._setParent(parent);
+            if(parent !== el.parentHeading){
+              el._setParent(parent);
+            }
           });
-        },
+        }
       });
 
       Polymer.RelativeHeadingManager.instance = null;
 
+      /*
+       * checks to see if there is an instance available, and if not appends one
+       */
       Polymer.RelativeHeadingManager.requestAvailability = function() {
         if (!Polymer.RelativeHeadingManager.instance) {
           Polymer.RelativeHeadingManager.instance = document.createElement('relative-heading-manager');
