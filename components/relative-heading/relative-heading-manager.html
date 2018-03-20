@@ -1,0 +1,66 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`relative-heading-manager`
+A LRN element
+
+@demo demo/index.html
+
+@microcopy - the mental model for this element
+ -
+ -
+ -
+
+-->
+
+<dom-module id="relative-heading-manager">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+      Polymer.RelativeHeadingManager = Polymer({
+
+        is: 'relative-heading-manager',
+
+        properties: {},
+        
+        /*
+         * listen for headings and set their parent elements
+         */
+        created: function() {
+          let root = this;
+          if (!Polymer.RelativeHeadingManager.instance) {
+            Polymer.RelativeHeadingManager.instance = root;
+          }
+          document.body.addEventListener('heading-created', function(e){
+            let el = e.detail, pid =  el.getAttribute('subtopic-of'), parent = document.getElementById(pid);
+            if(parent !== el.parentHeading){
+              el._setParent(parent);
+            }
+          });
+        }
+      });
+
+      Polymer.RelativeHeadingManager.instance = null;
+
+      /*
+       * checks to see if there is an instance available, and if not appends one
+       */
+      Polymer.RelativeHeadingManager.requestAvailability = function() {
+        if (!Polymer.RelativeHeadingManager.instance) {
+          Polymer.RelativeHeadingManager.instance = document.createElement('relative-heading-manager');
+        }
+
+        document.body.appendChild(Polymer.RelativeHeadingManager.instance);
+      };
+    })();
+  </script>
+</dom-module>

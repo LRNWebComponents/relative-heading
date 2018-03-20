@@ -1,0 +1,25 @@
+{
+  "name": "relative-heading",
+  "description": "A LRN element",
+  "main": "relative-heading.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.10.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "homepage": "https://github.com/LRNWebComponents/relative-heading",
+  "_release": "af1f3feedb",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "af1f3feedb8200f617a5834a8f53c5170f463056"
+  },
+  "_source": "https://github.com/LRNWebComponents/relative-heading.git",
+  "_target": "master",
+  "_originalSource": "LRNWebComponents/relative-heading",
+  "_direct": true
+}
