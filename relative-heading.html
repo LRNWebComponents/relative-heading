@@ -79,9 +79,9 @@ A LRN element
        * fired if the subtopic changes
        */
       attributeChanged: function(name,type){
-        if(name==='subtopic-of') {
+        if(name === 'subtopic-of') {
           this.fire('heading-created',this);
-        } else if (name==='tag' || name==="parent-heading") {
+        } else if (name === 'tag') {
           this.fire('heading-changed',this);
           this.innerHTML = '<'+this.tag+'>'+this.text+'</'+this.tag+'>';
         }
