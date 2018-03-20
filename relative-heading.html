@@ -47,7 +47,7 @@ A LRN element
           reflectToAttribute: true
         },
         /* 
-         * the heading element that this heading is a subtopic of 
+         * the id of the heading element that this heading is a subtopic of 
          */
         parentHeading: {
           type: Object,
@@ -81,7 +81,7 @@ A LRN element
       attributeChanged: function(name,type){
         if(name==='subtopic-of') {
           this.fire('heading-created',this);
-        } else if (name==='tag') {
+        } else if (name==='tag' || name==="parentHeading") {
           this.fire('heading-changed',this);
           this.innerHTML = '<'+this.tag+'>'+this.text+'</'+this.tag+'>';
         }
